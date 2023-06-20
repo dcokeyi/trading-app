@@ -1,0 +1,9 @@
+.content__view {
+  padding-top: 32px !important;
+}
+
+@media (min-width: 640px) {
+  .content__view {
+    padding-right: 344px !important;
+  }
+}
