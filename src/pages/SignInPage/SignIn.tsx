@@ -1,47 +1,47 @@
-import React from "react";
-import {useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Credentials } from "../../models/credentials";
+import React, { useEffect } from "react";
+import { useMutation } from '@apollo/client';
+import { Credentials, SignInDocument } from '../../graphql';
+import { AuthService } from '../../services';
 import { useNavigate } from "react-router-dom";
-import * as yup from "yup";
+import { useAuthContext } from "../../contexts/AuthContext"
 
 import logo from "../../assets/bullsfirst-logo.svg"
 import './SignIn.css'
+import { SignInForm } from "./SignInForm";
 
-export interface SignInFormProps {
-    signInError?: string;
-    onSubmit?: (credentials: Credentials) => void;
-}
-
-const schema = yup.object({
-    email: yup.string().email().required(),
-    password: yup.string().required(),
-}).required();
-
-export const SignIn = (props: SignInFormProps) => {
+export const SignIn = () => {
+    const { authState, setAuthState } = useAuthContext();
     const navigate = useNavigate();
-    const { register, handleSubmit, formState: { errors } } = useForm<Credentials>({
-        resolver: yupResolver(schema)
-    });
-    const onSubmit = (data:Credentials) => {
-        if(errors) {
-           navigate('/account');
-           console.log(errors);
-           console.log(data); 
-        }
+    
+    //Handles mutation for the signIn page
+    const [signIn, {error}] = useMutation(SignInDocument);
+
+    // redirect if user is already logged in
+    useEffect(() => {
+    if (authState.user) {
+      navigate('/accounts');
+    }
+  }, [authState.user, navigate]);
+
+    // OnSubmit function for form.
+    const onSubmit = async (credentials:Credentials) => {
+        try {
+            const result = await signIn({ variables: { credentials } });
+            if (result.data) {
+              const { user, accessToken } = result.data.signIn;
+              AuthService.setAccessToken(accessToken);
+              setAuthState({ ...authState, user });
+            }
+          } catch (e) {
+          // eat error because it is already captured in useMutation result
+            console.log(error)
+          }
+
     };
     return (
         <div className="signin__container flex flex-col">
             <img className="py-4" src={logo} alt="Logo" width="190" />
-            <form className="flex flex-col w-400" onSubmit={handleSubmit(onSubmit)}>
-                <label>Email</label>
-                <input data-testid="email-input" type="email" className=""{...register("email", {required: true})}/>
-                {errors.email && <p data-testid="error-msg-email" className="text-error">email is required field</p>}
-                <label className="pass">Password</label>
-                <input data-testid="password-input" type="password" {...register("password", {required: true})}/>
-                {errors.password && <p data-testid="error-msg-pass" className="text-error">password is required field</p>}
-                <input className="mt-5 btn-primary" data-testid="button" type="submit" value="Sign in" />
-            </form>
+            <SignInForm onSubmit={onSubmit}/>
             <p className="py-2 text-primary-500 h5">Sign up</p>
         </div>
     );

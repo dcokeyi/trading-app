@@ -4,13 +4,16 @@ import logo from '../../assets/bullsfirst-logo.svg';
 import popsicle from '../../assets/popsicle.png';
 import { Button } from '../../components/Button/Button';
 import { HorizontalContainer } from '../../components';
+import { useAuthContext } from '../../contexts';
 import './Hero.css';
 
 export const Hero = () => {
   let navigate = useNavigate();
+  const {authState} = useAuthContext()
+  const {user} = authState
 
   const handleClick = () => {
-    navigate('/signin');
+    user ? navigate('/accounts') : navigate('/signin');
   };
   return (
     <div className="bg-neutral-light py-4">

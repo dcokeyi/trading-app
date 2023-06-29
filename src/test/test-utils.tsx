@@ -1,9 +1,11 @@
 import React, { ReactElement, Suspense } from 'react';
+import { ApolloProvider } from '@apollo/client';
 import { render, RenderOptions } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { ErrorBoundary, Loading } from '../components';
 import { EnvProvider } from '../contexts';
+import { GraphQlUtils } from '../utils';
 
 // -----------------------------------------------------------------------------
 // This file re-exports everything from React Testing Library and then overrides
@@ -14,6 +16,9 @@ import { EnvProvider } from '../contexts';
 // https://testing-library.com/docs/react-testing-library/setup/#custom-render
 // -----------------------------------------------------------------------------
 
+// Create Apollo Client
+const apolloClient = GraphQlUtils.createApolloClient();
+
 interface AllProvidersProps {
   children?: React.ReactNode;
 }
@@ -23,7 +28,9 @@ function AllProviders({ children }: AllProvidersProps) {
     <Suspense fallback={<Loading />}>
       <ErrorBoundary>
         <EnvProvider>
+          <ApolloProvider client={apolloClient}>
           <Router>{children}</Router>
+          </ApolloProvider>
         </EnvProvider>
       </ErrorBoundary>
     </Suspense>
