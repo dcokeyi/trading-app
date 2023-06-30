@@ -14,6 +14,25 @@ describe('SignIn button', function() {
         // Should be redirected to signIn page
         cy.url().should('include', '/signin');
 
+        // Click sign up link
+        cy.contains('Sign up').click();
+
+        // Should be redirected to signIn page
+        cy.url().should('include', '/signup');
+
+         //Enter email and password to the signup form
+         cy.get('form').within(() => {
+            cy.get('input[name="name"]').type('John Smith');
+            cy.get('input[name="email"]').type('jsmith@example.com');
+            cy.get('input[name="password"]').type('cool');
+          });
+
+         // Click sign up button
+         cy.contains('Sign Up').click();
+
+        // Click sign in link
+        cy.contains('Sign in').click();
+
         //Enter email and password to the form
         cy.get('form').within(() => {
             cy.get('input[name="email"]').type('jsmith@example.com');

@@ -334,6 +334,19 @@ export type SignInMutation = {
   };
 };
 
+export type SignUpMutationVariables = Exact<{
+  signUpInput: SignUpInput;
+}>;
+
+export type SignUpMutation = {
+  __typename?: 'Mutation';
+  signUp: {
+    __typename?: 'UserInfo';
+    accessToken: string;
+    user: { __typename?: 'User'; id: string; name: string; email: string };
+  };
+};
+
 export const UserFieldsFragmentDoc = {
   kind: 'Document',
   definitions: [
@@ -651,3 +664,83 @@ export const SignInDocument = {
     },
   ],
 } as unknown as DocumentNode<SignInMutation, SignInMutationVariables>;
+export const SignUpDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'SignUp' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'signUpInput' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'SignUpInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'signUp' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'signUpInput' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'signUpInput' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'UserInfoFields' },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserInfoFields' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'UserInfo' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'user' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+              ],
+            },
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'accessToken' } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<SignUpMutation, SignUpMutationVariables>;

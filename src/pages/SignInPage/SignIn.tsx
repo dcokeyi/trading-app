@@ -23,6 +23,10 @@ export const SignIn = () => {
     }
   }, [authState.user, navigate]);
 
+    const handleSignUpRedirect = () => {
+      navigate('/signup')
+    }
+
     // OnSubmit function for form.
     const onSubmit = async (credentials:Credentials) => {
         try {
@@ -42,7 +46,7 @@ export const SignIn = () => {
         <div className="signin__container flex flex-col">
             <img className="py-4" src={logo} alt="Logo" width="190" />
             <SignInForm onSubmit={onSubmit}/>
-            <p className="py-2 text-primary-500 h5">Sign up</p>
+            <p className="py-2 text-primary-500 h5" onClick={handleSignUpRedirect}>Sign up</p>
         </div>
     );
 } 
