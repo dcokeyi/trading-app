@@ -1,7 +1,9 @@
 .navbar__brand {
     color: #FFFFFF;
+    font-size: 20px;
 }
 
 .navbar__info {
     color: #BCCCDC;
+    font-size: 16px;
 }

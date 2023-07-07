@@ -321,6 +321,13 @@ export type SeriesFieldsFragment = {
   data: Array<{ __typename?: 'DataPoint'; x: number; y: number }>;
 };
 
+export type GetAccountsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetAccountsQuery = {
+  __typename?: 'Query';
+  accounts: Array<{ __typename?: 'Account'; id: string; name: string }>;
+};
+
 export type SignInMutationVariables = Exact<{
   credentials: Credentials;
 }>;
@@ -584,6 +591,49 @@ export const GetUserDocument = {
     },
   ],
 } as unknown as DocumentNode<GetUserQuery, GetUserQueryVariables>;
+export const GetAccountsDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetAccounts' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'accounts' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'AccountFields' },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'AccountFields' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Account' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetAccountsQuery, GetAccountsQueryVariables>;
 export const SignInDocument = {
   kind: 'Document',
   definitions: [

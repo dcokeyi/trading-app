@@ -1,0 +1,20 @@
+.accounts__container {
+    background-color: #303030;
+    max-width: 200px;
+}
+
+.accounts__content {
+    color: #bdbdbd;
+    font-size: 14px;
+}
+
+.accounts__content_selected {
+    color: #2680c2;
+    font-size: 14px;
+
+}
+
+.account__title {
+    color: #ffffff;
+    font-size: 18px;
+}

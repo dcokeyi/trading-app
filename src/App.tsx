@@ -14,6 +14,7 @@ export const App = () => {
   const {data} = useQuery(GetUserDocument, {
     skip: !isTokenAvailable
   });
+  
 
   useEffect(() => {
     setAuthState({user: data?.user})
@@ -25,7 +26,7 @@ export const App = () => {
       <Route path="*" element={<NotFoundPage />} />
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />}/>
-      <Route path="/accounts" element={
+      <Route path="/accounts/*" element={
         <ProtectedRoute>
           <Accounts />
         </ProtectedRoute>} 

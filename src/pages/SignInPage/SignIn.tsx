@@ -33,6 +33,7 @@ export const SignIn = () => {
             const result = await signIn({ variables: { credentials } });
             if (result.data) {
               const { user, accessToken } = result.data.signIn;
+              console.log(user)
               AuthService.setAccessToken(accessToken);
               setAuthState({ ...authState, user });
             }

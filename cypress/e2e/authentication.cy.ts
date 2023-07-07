@@ -21,29 +21,13 @@ describe('SignIn button', function() {
         cy.url().should('include', '/signup');
 
          //Enter email and password to the signup form
-         cy.get('form').within(() => {
-            cy.get('input[name="name"]').type('John Smith');
-            cy.get('input[name="email"]').type('jsmith@example.com');
-            cy.get('input[name="password"]').type('cool');
-          });
-
-         // Click sign up button
-         cy.contains('Sign Up').click();
+        cy.signupJohnSmith()
 
         // Click sign in link
         cy.contains('Sign in').click();
 
         //Enter email and password to the form
-        cy.get('form').within(() => {
-            cy.get('input[name="email"]').type('jsmith@example.com');
-            cy.get('input[name="password"]').type('cool');
-          });
-
-        //verify sign in button is on page
-        cy.contains('Sign in');
-
-        // Click sign in button
-        cy.contains('Sign in').click();
+        cy.signinJohnSmith();
 
         // Should be redirected to Accounts
         cy.url().should('include', '/accounts');

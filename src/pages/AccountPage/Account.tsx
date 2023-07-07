@@ -1,8 +1,17 @@
 import { useAuthContext } from "../../contexts";
-// import { useMutation } from '@apollo/client';
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { useQuery } from '@apollo/client';
+import { GetAccountsDocument } from "../../graphql"
 import { AuthService } from "../../services";
-import { Navbar } from '../../components';
-import { useNavigate } from "react-router-dom";
+import { 
+    Navbar, 
+    ViewVerticalContainer,
+    HorizontalContainer, 
+    SideBar,
+    // AccountHeader,
+    VerticalContainer
+} from "../../components";
+import { AccountsView } from "./AccountView";
 
 export const Accounts = () => {
     const {authState, setAuthState} = useAuthContext();
@@ -11,8 +20,8 @@ export const Accounts = () => {
     //use naviagte hook
     const navigate = useNavigate()
 
-    //Handle signout mutation
-    // const [signOut, {error}] = useMutation(Mutation.signOut)
+    //Get account user Query
+    const { data } = useQuery(GetAccountsDocument)
 
     const handleSignOut = () => {
         AuthService.removeAccessToken()
@@ -21,10 +30,17 @@ export const Accounts = () => {
     }
  
     return (
-        <>
-            <Navbar 
-            name={user?.name} 
-            signOut={handleSignOut}/>
-        </>
+        <ViewVerticalContainer>
+            <Navbar name={user?.name} signOut={handleSignOut} />
+            <HorizontalContainer className="min-h-0">
+                <SideBar title="Accounts" items={data?.accounts}/>
+                <VerticalContainer>
+                    <Routes>
+                        <Route path=":accountId/*" element={<AccountsView/>} />
+                    </Routes>
+                </VerticalContainer>
+            </HorizontalContainer>
+        </ViewVerticalContainer>
+        
     );
 }

@@ -1,6 +1,0 @@
-# mutation SignOut {
-#   signOut {
-#     accessToken: String!
-#   }
-# }
-

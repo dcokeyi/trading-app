@@ -2,6 +2,7 @@ import { graphql } from "msw";
 import {v4 as uuidv4} from "uuid"
 import { AuthService } from "../services";
 import { Storage } from "../utils";
+import accounts from './data/accounts.json';
 
 export const handlers = [
   graphql.mutation('SignIn', (req, res, ctx) => {
@@ -18,15 +19,15 @@ export const handlers = [
     keys.forEach((key) => {
       if (key.startsWith('mock_')) {
         const user = Storage.get(key);
-        console.log(user)
 
         if (email === user.email && password === user.password) {
           storedUser = user
         }
       }
     });
-
+    
     if (storedUser) {
+      const {name, email} = storedUser;
       return res(
         ctx.data({
           signIn: {
@@ -34,8 +35,8 @@ export const handlers = [
             user: {
               __typename: 'User',
               id: '8c8726cb-7f8a-4ebd-b5ec-3ea5a2c144ab',
-              name: 'John Smith',
-              email: 'jsmith@example.com',
+              name: `${name}`,
+              email: `${email}`,
             },
             accessToken: uuidv4(),
           },
@@ -102,5 +103,10 @@ export const handlers = [
       })
     );
 
-  })
+  }),
+
+  graphql.query('GetAccounts', (req, res, ctx) => {
+    return res(ctx.data({ accounts }));
+  }),
+
 ];
